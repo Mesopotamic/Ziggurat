@@ -36,3 +36,10 @@ bool zig_WindowLoopContinues()
 {
     return !((windowStatus == zig_windowclosed) || (windowStatus == zig_windowclosing));
 }
+
+zigenum zig_ProcessEvents()
+{
+    // Do platform specific message handling
+    zigenum res = platformProcess();
+    return res;
+}

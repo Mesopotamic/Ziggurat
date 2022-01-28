@@ -59,6 +59,26 @@ zigenum platformZigInit()
     return zig_success;
 }
 
+zigenum platformProcess()
+{
+    MSG msg = {0};
+
+    // Want to loop through all the messages until windows requests a close
+    while (msg.message != WM_QUIT) {
+        // Check the next message
+        if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+            // The message was a regular one, so dispatch it to the window proc callback
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+        } else {
+            // Peek message was false, so we have completed all the messages for this frame
+            break;
+        }
+    }
+
+    return zig_success;
+}
+
 LRESULT CALLBACK WindowProcCallback(HWND windowHandle, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     // We need to process all the messages sent to us by the windows API
