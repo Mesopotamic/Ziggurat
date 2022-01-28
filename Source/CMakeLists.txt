@@ -10,4 +10,4 @@ if(WIN32)
 	)
 endif()
 
-target_sources(Ziggurat PUBLIC ${SOURCES})
+target_sources(Ziggurat PRIVATE ${SOURCES})

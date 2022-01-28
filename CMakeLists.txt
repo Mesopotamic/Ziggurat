@@ -15,7 +15,7 @@ set(Ziggurat_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/Include" CACHE PATH INTERNA
 add_library(Ziggurat Source/Main.c)
 
 # Track the include directories for Ziggurat 
-target_sources(Ziggurat PUBLIC
+target_sources(Ziggurat PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/Include/Ziggurat/Ziggurat.h
     ${CMAKE_CURRENT_LIST_DIR}/Include/Ziggurat/ZigguratEnums.h)
 
