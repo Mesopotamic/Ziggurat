@@ -9,6 +9,49 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include "ZigguratEnums.h"
+
+/*************************************************************************************************************
+ * We have to ensure that the windowing system for Ziggurat was specified
+ * This controls for which windowing system Ziggurat will be built for
+ * But it also defines the required Vulkan surface extension define,
+ * as such, you have to place this include above your Vulkan headers
+ * This is kind of messy, sorry!*/
+#ifdef WIN32
+#define ZIG_WINDOWING_SYSTEM_WIN32 (1)
+#define VK_USE_PLATFORM_WIN32_KHR (1)
+#elif defined __ANDROID__
+#define ZIG_WINDOWING_SYSTEM_ANDROID (1)
+#define VK_USE_PLATFORM_ANDROID_KHR (1)
+#elif defined __APPLE__
+#define ZIG_WINDOWING_SYSTEM_MOLTON (1)
+#define VK_USE_PLATFORM_METAL_EXT(1)
+#elif defined __linux__
+// Linux is special as it can have multiple windowing systems
+// mainly either X or Wayland
+// In this sitation we can't make the devision automatically
+// So we need the user to pass one of these when compiling :
+// either ZIG_WINDOWING_SYSTEM_X or XIG_WINDOWING_SYSTEM_WAYLAND
+#if defined ZIG_WINDOWING_SYSTEM_X && defined ZIG_WINDOWING_SYSTEM_WAYLAND
+#error You must define only one of ZIG_WINDOWING_SYSTEM_X or ZIG_WINDOWING_SYSTEM_WAYLAND. Not both
+#elif not defined ZIG_WINDOWING_SYSTEM_X && not defined ZIG_WINDOWING_SYSTEM_WAYLAND
+#error You must define either ZIG_WINDOWING_SYSTEM_X or ZIG_WINDOWING_SYSTEM_WAYLAND.
+
+// Now that we've ensured exactly one linux windowing system was selected
+// we can define the corresponding Vulkan define
+#ifdef ZIG_WINDOWING_SYSTEM_X
+#define VK_USE_PLATFORM_XCB_KHR
+#elif defined ZIG_WINDOWING_SYSTEM_WAYLAND
+#define VK_USE_PLATFORM_WAYLAND_KHR
+#endif
+
+#endif  // ifdef__linux__
+
+// We got to the end of windowing system selection, and failed. So you're compiling for a werid target
+#else
+#error Ziggurat windowing system has not been set. Look in Ziggurat.h to ensure one has been defined
+#endif
+/*************************************************************************************************************/
+
 /**
  * Common Ziggurat functions used on every platform
  */
