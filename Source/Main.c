@@ -13,15 +13,15 @@ uint32_t windowHeight = 0;
 
 const char* zig_GetVulkanSurfaceEXTName()
 {
-#ifdef ZIG_WINDOWING_SYSTEM_WIN32
+#ifdef VK_USE_PLATFORM_WIN32_KHR
     return "VK_KHR_win32_surface";
-#elif defined ZIG_WINDOWING_SYSTEM_ANDROID
+#elif defined VK_USE_PLATFORM_ANDROID_KHR
     return "VK_KHR_android_surface";
-#elif defined ZIG_WINDOWING_SYSTEM_MOLTEN
+#elif defined VK_USE_PLATFORM_METAL_EXT
     return "VK_EXT_metal_surface";
-#elif defined ZIG_WINDOWING_SYSTEM_X
+#elif defined VK_USE_PLATFORM_XCB_KHR
     return "VK_KHR_xcb_surface";
-#elif defined ZIG_WINDOWING_SYSTEM_WAYLAND
+#elif defined VK_USE_PLATFORM_WAYLAND_KHR
     return "VK_KHR_wayland_surface"
 #else
     return NULL;
