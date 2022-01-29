@@ -28,6 +28,16 @@ const char* zig_GetVulkanSurfaceEXTName()
 #endif
 }
 
+zigenum zig_CreateVulkanSurface(VkSurfaceKHR* pSurface, VkInstance instance)
+{
+    // Null pointer check the surface
+    if (pSurface == NULL) {
+        return zig_nullpointer;
+    }
+    zigenum res = platformCreateSurface(pSurface, instance);
+    return res;
+}
+
 zigenum zig_ShowWindow(uint32_t width, uint32_t height)
 {
     // ensure we haven't already initialised
@@ -45,6 +55,7 @@ zigenum zig_ShowWindow(uint32_t width, uint32_t height)
 
     // Set that the window is open
     windowStatus = zig_windowopen;
+    return zig_success;
 }
 
 zigenum zig_WindowStatus() { return windowStatus; }

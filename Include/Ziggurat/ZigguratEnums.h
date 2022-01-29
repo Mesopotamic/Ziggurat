@@ -8,6 +8,7 @@ typedef enum zigenum {
     zig_success = 0,       // Successful event
     zig_unknownfail,       // The command failed, but I haven't made an enum yet
     zig_alreadyinit,       // User tried to initialise Ziggurat, but it was already active
+    zig_nullpointer,       // User passed a null pointer in the wrong place
     zig_windownotinit,     // Window hasn't been opened for the first time yet
     zig_windowopen,        // Window is currently open
     zig_windowminimised,   // Window is currently minimised

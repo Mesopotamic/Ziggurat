@@ -3,11 +3,33 @@
  */
 #include "ZigInternal.h"
 
-HINSTANCE zigHInstance = NULL;
-HWND zigHWindow = NULL;
+HINSTANCE zigHInstance;
+HWND* pZigHWindow;  // Turned this into a pointer since the value was being cleaned up when out of scope
 
 // Forward declare the window call back function
 LRESULT CALLBACK WindowProcCallback(HWND windowHandle, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+zigenum platformCreateSurface(VkSurfaceKHR* pSurface, VkInstance instance)
+{
+    // Null pointer check the instance handles
+    if (zigHInstance == NULL || pZigHWindow == NULL) {
+        return zig_windownotinit;
+    }
+    HWND zigHWindow = *pZigHWindow;
+
+    // Create the win32 surface
+    VkWin32SurfaceCreateInfoKHR info;
+    memset(&info, 0, sizeof(VkWin32SurfaceCreateInfoKHR));
+    info.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
+    info.hinstance = zigHInstance;
+    info.hwnd = zigHWindow;
+
+    if (vkCreateWin32SurfaceKHR(instance, &info, NULL, pSurface) != VK_SUCCESS) {
+        return zig_unknownfail;
+    } else {
+        return zig_success;
+    }
+}
 
 zigenum platformZigInit()
 {
@@ -15,6 +37,13 @@ zigenum platformZigInit()
         // Somehow this has been called without the wrapper
         return zig_unknownfail;
     }
+
+    // Malloc space on the heap for the window handle
+    pZigHWindow = malloc(sizeof(HWND));
+    if (pZigHWindow == NULL) {
+        return zig_unknownfail;
+    }
+    HWND zigHwindow = *pZigHWindow;
 
     // First get the instance handle of the application we're linked to
     zigHInstance = GetModuleHandle(NULL);

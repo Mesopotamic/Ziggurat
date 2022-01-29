@@ -14,19 +14,22 @@ extern zigenum windowStatus;
 extern uint32_t windowWidth;
 extern uint32_t windowHeight;
 
-#ifdef WIN32
-extern HINSTANCE zigHInstance;
-extern HWND zigHWindow;
-#endif
-
 /**
  * @brief Platform dependant window initialisation
  */
 zigenum platformZigInit();
 
 /**
- * @breif Platform dependant event handelling
+ * @brief Platform dependant event handelling
  */
 zigenum platformProcess();
+
+/**
+ * @brief Produces the surface for the build windowing system
+ * @param pSurface Pointer to the Vulkan surface being created
+ * @param instance The instance being used to created the device
+ * @returns The Ziggurat success code
+ */
+zigenum platformCreateSurface(VkSurfaceKHR* pSurface, VkInstance instance);
 
 #endif  //

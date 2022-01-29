@@ -18,20 +18,26 @@
 /*************************************************************************************************************/
 #if ((VK_USE_PLATFORM_WIN32_KHR + VK_USE_PLATFORM_ANDROID_KHR + VK_USE_PLATFORM_METAL_EXT + \
       VK_USE_PLATFORM_XCB_KHR + VK_USE_PLATFORM_WAYLAND_KHR) != 1)
-#error Ziggurat has not been built with exactly one window system in mind
+#error Ziggurat or project using Ziggurat has not been built with exactly one window system specified
 #endif
 
 // Include the VkClay Vulkan wrapper
 #include "VkClay/VkClay.h"
-/**
- * Common Ziggurat functions used on every platform
- */
 
 /**
- * @brief Gets the name of the instance extension targetted by this build of zig
+ * @brief Gets the name of the instance extension targetted by this build of zig, useful for when creating
+ * your Vulkan instance
  * @returns "VK_KHR_*surface name*_surface"
  */
 const char* zig_GetVulkanSurfaceEXTName();
+
+/**
+ * @brief Creates the vulkan surface for the user
+ * @param instance The Vulkan instance handle used to create the physical device
+ * @param pSurface Pointer to the Vukan Surface to be created
+ * @returns Ziggurat success code
+ */
+zigenum zig_CreateVulkanSurface(VkSurfaceKHR* pSurface, VkInstance instance);
 
 /**
  * @brief Creates and shows the Ziggurat window
@@ -56,28 +62,5 @@ zigenum zig_WindowStatus();
  * @returns true if the loop should continue
  */
 bool zig_WindowLoopContinues();
-
-/**
- * Windows specific declarations
- */
-#ifdef WIN32
-#include <Windows.h>
-
-// We need to supply the windows instance window handles so that the vkWin32SurfaceCreateInfoKHR structure can
-// be filled by the user
-
-/**
- * @brief When targetting windows this function fetches the instance handle
- * @returns Instance Handle of current application
- */
-HINSTANCE zig_GetHInstance();
-
-/**
- * @brief When targetting windows, this function fetches the window handle
- * @returns Handle for the currently open Zig window
- */
-HWND zig_GetHWindow();
-
-#endif  // WIN32
 
 #endif  // !__ZIGGURAT_MAIN_HEADER_H__
