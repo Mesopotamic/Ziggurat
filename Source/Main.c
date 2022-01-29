@@ -11,6 +11,23 @@ zigenum windowStatus = zig_windownotinit;
 uint32_t windowWidth = 0;
 uint32_t windowHeight = 0;
 
+const char* zig_GetVulkanSurfaceEXTName()
+{
+#ifdef ZIG_WINDOWING_SYSTEM_WIN32
+    return "VK_KHR_win32_surface";
+#elif defined ZIG_WINDOWING_SYSTEM_ANDROID
+    return "VK_KHR_android_surface";
+#elif defined ZIG_WINDOWING_SYSTEM_MOLTEN
+    return "VK_EXT_metal_surface";
+#elif defined ZIG_WINDOWING_SYSTEM_X
+    return "VK_KHR_xcb_surface";
+#elif defined ZIG_WINDOWING_SYSTEM_WAYLAND
+    return "VK_KHR_wayland_surface"
+#else
+    return NULL;
+#endif
+}
+
 zigenum zig_ShowWindow(uint32_t width, uint32_t height)
 {
     // ensure we haven't already initialised

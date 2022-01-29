@@ -23,7 +23,7 @@
 #define ZIG_WINDOWING_SYSTEM_ANDROID (1)
 #define VK_USE_PLATFORM_ANDROID_KHR (1)
 #elif defined __APPLE__
-#define ZIG_WINDOWING_SYSTEM_MOLTON (1)
+#define ZIG_WINDOWING_SYSTEM_MOLTEN (1)
 #define VK_USE_PLATFORM_METAL_EXT(1)
 #elif defined __linux__
 // Linux is special as it can have multiple windowing systems
@@ -55,6 +55,12 @@
 /**
  * Common Ziggurat functions used on every platform
  */
+
+/**
+* @brief Gets the name of the instance extension targetted by this build of zig
+* @returns "VK_KHR_*surface name*_surface"
+*/
+const char* zig_GetVulkanSurfaceEXTName();
 
 /**
  * @brief Creates and shows the Ziggurat window
