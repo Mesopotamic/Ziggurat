@@ -10,17 +10,6 @@
 #include <stdint.h>
 #include "ZigguratEnums.h"
 
-/*************************************************************************************************************
-* We have to ensure that Ziggurat has been compiled with a windowing system in mind
-* This is usually automatically decided based on the Operating system, asside from Linux
-* We can check this via adding all of the VK_USE_PLATFORM_*_KHR variables
-* since they are defined to one, so their sum must be exactly equal to one
-/*************************************************************************************************************/
-#if ((VK_USE_PLATFORM_WIN32_KHR + VK_USE_PLATFORM_ANDROID_KHR + VK_USE_PLATFORM_METAL_EXT + \
-      VK_USE_PLATFORM_XCB_KHR + VK_USE_PLATFORM_WAYLAND_KHR) != 1)
-#error Ziggurat or project using Ziggurat has not been built with exactly one window system specified
-#endif
-
 // Include the VkClay Vulkan wrapper
 #include "VkClay/VkClay.h"
 
