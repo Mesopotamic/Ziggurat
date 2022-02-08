@@ -14,13 +14,13 @@ function(Ziggurat_AddTargetDefinitions ARG_TARGET)
     if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows" OR ${CMAKE_SYSTEM_NAME} STREQUAL "CYGWIN"
         OR ${CMAKE_SYSTEM_NAME} STREQUAL "MSYS")
         target_compile_definitions(${ARG_TARGET} PUBLIC VK_USE_PLATFORM_WIN32_KHR=1)
-        target_compile_definitions(${ARG_TARGET} PUBLIC ZIG_WINDOWING_SYSTEM=Win32)
+        
     elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Android")
         target_compile_definitions(${ARG_TARGET} PUBLIC VK_USE_PLATFORM_ANDROID_KHR=1)
-        target_compile_definitions(${ARG_TARGET} PUBLIC ZIG_WINDOWING_SYSTEM=Android)
+        
     elseif(${CMAKE_SYSTEM_NAME} STREQUAL "iOS" OR ${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
         target_compile_definitions(${ARG_TARGET} PUBLIC VK_USE_PLATFORM_METAL_EXT=1)
-        target_compile_definitions(${ARG_TARGET} PUBLIC ZIG_WINDOWING_SYSTEM=Molten)
+        
     elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
         # Linux Requires you to specify the windowing system to X or Wayland
         # You do this with -DZIG_WINDOW_SYSTEM="X/Wayland"
@@ -31,10 +31,16 @@ function(Ziggurat_AddTargetDefinitions ARG_TARGET)
         # Make sure that the correct windowing system name is specified
         if(${ZIG_WINDOW_SYSTEM} STREQUAL "X")
             target_compile_definitions(${ARG_TARGET} PUBLIC VK_USE_PLATFORM_XCB_KHR=1)
-            target_compile_definitions(${ARG_TARGET} PUBLIC ZIG_WINDOWING_SYSTEM=XCB)
+            
+            # Link to the XCB windowing system
+            # Has to be done in Zig top level
+            find_package(XCB REQUIRED)
+            target_link_libraries(Ziggurat PRIVATE ${XCB_LIBRARIES})
+            target_include_directories(Ziggurat PRIVATE ${XCB_INCLUDE_DIRS})
+
         elseif(${ZIG_WINDOW_SYSTEM} STREQUAL "Wayland")
             target_compile_definitions(${ARG_TARGET} PUBLIC VK_USE_PLATFORM_WAYLAND_KHR=1)
-            target_compile_definitions(${ARG_TARGET} PUBLIC ZIG_WINDOWING_SYSTEM=Wayland)
+            
         else()
             message(FATAL_ERROR "-DZIG_WINDOW_SYSTEM must be only X or Wayland")
         endif()
