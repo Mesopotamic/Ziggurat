@@ -45,6 +45,29 @@ zigenum platformZigInit()
     return zig_success;
 }
 
-zigenum platformProcess() { return zig_success; }
+zigenum platformProcess() { 
+    // Loop through each of the generic X events that have been generated this frame
+    // We use xcb_poll_for_event which checks if an error has taken place in a non-blocking manner 
+    // It returns NULL if there is no event in the queue currently
+    xcb_generic_event_t *event = NULL;
+    while(event = xcb_poll_for_event(connection))
+    {
+        // break out of the messaging loop if there are none
+        if(event == NULL)
+            break;
+
+        // We have a valid event of some kind, process it
+        switch(event->response_type & ~0x80)
+        {
+            default:
+                // Currently un-handled event
+                continue;
+        }
+    }
+
+    // For some reason the generic event has to be freed
+    free(event);
+    return zig_success; 
+}
 
 zigenum platformCreateSurface(VkSurfaceKHR *pSurface, VkInstance instance) { return zig_success; }
